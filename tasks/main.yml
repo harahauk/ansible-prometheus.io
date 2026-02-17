@@ -1,2 +1,11 @@
 ---
-# tasks file for ansible-role-template
+# tasks file for ansible-prometheus.io
+
+- name: Scraping https://prometheus.io/download/
+  ansible.builtin.url:
+    url: "https://prometheus.io/download/"
+    #http_agent:
+  register: scrape_result
+
+- debug:
+    msg: "{{ scrape_result }}" 

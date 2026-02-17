@@ -20,8 +20,8 @@ The role *might* work on the following distributions with no guarantees:
 - Debian-based (Kali, Debian, Ubuntu)  
 
 ## Ansible
-You need ansible [optional install script](https://raw.githubusercontent.com/harahauk/ansible-help/refs/heads/main/install_ansible.sh), and the module 'community general' (which often is pre-installed with your ansible-distribution) and the "community docker" module.
-I maintain a [script at Github](./install_ansible.sh) which can automate this.
+You need Ansible [optional install script](https://raw.githubusercontent.com/harahauk/ansible-help/refs/heads/main/install_ansible.sh), and the Ansible module-collection `community general` (which often is pre-installed with your Ansible-distribution). That is the basis of any Ansible-control node, additionally to operate this role you need  the `community docker` module.
+I maintain a [script at Github](./install_ansible.sh) which can automate this in a way that do not interfere with system stability.
 
 On most systems these commands will do the same as the installation-script:
 ```

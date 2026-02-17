@@ -8,7 +8,7 @@ This is an [Ansible](https://www.ansible.com/)-role which installs and configure
 
 Requirements
 ------------
-## Linux
+### 1. Linux
 This role is tested and expected to perform on the following Linux-distributions:
 - Debian 12 "Bookworm"
 - Red Hat Linux 9
@@ -19,7 +19,7 @@ The role *might* work on the following distributions with no guarantees:
 - RHEL-based (RockyLinux, AlmaLinux)
 - Debian-based (Kali, Debian, Ubuntu)  
 
-## Ansible
+### 2. Ansible
 You need Ansible for a control-node. Either as a seperate computer/VM or on the intended target. You need the Ansible module-collection `community general` (which often is pre-installed with your Ansible-distribution). This is the basis of any Ansible-control node, additionally to operate this role you need  the `community docker` module.
 I maintain a [script at Github](https://raw.githubusercontent.com/harahauk/ansible-help/refs/heads/main/install_ansible.sh) which can automate this in a way that do not interfere with system stability. The script installs the two module-packs as well.
 

@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User={{ prometheus.user }}
+Group={{ prometheus.user }}
+Restart=on-failure
+ExecStart={{ prometheus.directories.extraction + '/' + prometheus_unarchive_path + '/prometheus' }} \
+  --config.file={{ prometheus.directories.extraction + '/' + prometheus_unarchive_path + '/prometheus.yml' }} \
+  --storage.tsdb.path={{ prometheus.directories.data }} \
+  --storage.tsdb.retention.time=30d
+
+[Install]
+WantedBy=multi-user.target

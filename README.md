@@ -6,7 +6,8 @@
 **NOTE**: This is a fun project that serves little purpose for the general public. There is far less involved ways of
 getting started with prometheus than manual scraping of their website.
 
-This is an [Ansible](https://www.ansible.com/)-role which installs and configures `prometheus`. [Links to additonal documentation](https://prometheus.io/docs/prometheus/latest/installation/).
+This is an [Ansible](https://www.ansible.com/)-role which installs and configures `prometheus`. 
+[Official download-documentation](https://prometheus.io/docs/prometheus/latest/installation/).
 
 
 ## Requirements

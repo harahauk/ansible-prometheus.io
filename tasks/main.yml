@@ -1,7 +1,7 @@
 ---
 # tasks file for ansible-prometheus.io
 
-- name: Scraping https://prometheus.io/download/
+- name: Scraping the HTML from https://prometheus.io/download/
   ansible.builtin.uri:
     url: "https://prometheus.io/download/"
     return_content: yes
@@ -18,15 +18,56 @@
     prometheus_version: "{{ prometheus_filename[prometheus_filename.find('-')+1:prometheus_filename.find('.linux')] }}"
 
 - debug:
-    msg: "Scraping shows Prometheus is in version: {{ prometheus_version}} with the filename: {{ prometheus_filename }}"
+    msg: "Scraping shows prometheus is in version: {{ prometheus_version}} with the filename: {{ prometheus_filename }}"
 
 - set_fact:
     prometheus_download_url: "{{ base_download_url }}/v{{ prometheus_version }}/{{ prometheus_filename }}"
+    prometheus_unarchive_path: "{{ prometheus_filename[:-7] }}" #-tar.gz
 
-- debug:
-    msg: "{{ prometheus_download_url }}"
-
-- name: Download prometheus
+- name: Download prometheus to /tmp
   ansible.builtin.get_url:
     url: "{{ prometheus_download_url }}"
     dest: "/tmp/{{ prometheus_filename }}"
+
+- name: Create user for prometheus
+  user:
+    name: "{{ prometheus.user }}"
+    state: present
+  become: yes
+  when: prometheus.user != 'root'
+
+- name: Create directories for prometheus
+  file:
+    path: "{{ item.value }}"
+    state: directory
+    owner: "{{ prometheus.user }}"
+    group: root
+  with_items: "{{ prometheus.directories | dict2items }}"
+  when: item.value[-5:] != 'lib64'
+  become: yes
+
+- name: Extract prometheus tarball to {{ prometheus.directories.extraction }}
+  become: yes
+  unarchive:
+    src: "/tmp/{{ prometheus_filename }}"
+    dest: "{{ prometheus.directories.extraction }}"
+
+- name: Create service unit for systemd
+  become: yes
+  template:
+    src: "prometheus.service.j2"
+    dest: "/etc/systemd/system/prometheus.service"
+  register: prometheus_service_creation
+
+- name: Reload systemd-daemons
+  when: prometheus_service_creation.changed
+  become: yes
+  shell:
+    cmd: "systemctl daemon-reload"
+
+- name: Run and enable prometheus
+  become: yes
+  service:
+    name: "prometheus.service"
+    enabled: yes
+    state: started
